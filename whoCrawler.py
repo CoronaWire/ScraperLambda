@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup
+
 import scrapy
 import datetime as dt
 import uuid
