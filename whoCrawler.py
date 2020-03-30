@@ -7,16 +7,17 @@ import uuid
 class WHOCrawler(scrapy.Spider):
   name = 'WHOCrawler'
   start_urls = ['https://www.who.int/emergencies/diseases/novel-coronavirus-2019/events-as-they-happen']
-  
+
 
   def __init__(self):
     self.all_data = {}
-    self.article_limit = 5
+    self.article_limit = 999
 
   def closed(self, reason):
-    for k,v in self.all_data.iteritems():
-        print("Data [{}: P{}]".format(k,v))
-    
+      print("Finished Scraping for WHO")
+    # for k,v in self.all_data.iteritems():
+    #     print("Data [{}: P{}]".format(k,v))
+
   def parse(self, response):
 
     for item_data in response.css('div#PageContent_C229_Col01 > div.content-block > div'):
@@ -42,7 +43,7 @@ class WHOCrawler(scrapy.Spider):
 
       if not article_date:
         article_date = item_data.css(':nth-child({}) *::text'.format(dateIndex)).get()
-      
+
       if article_date is not None:
         article_date = article_date.strip().encode('ascii', 'ignore')
 
@@ -61,7 +62,7 @@ class WHOCrawler(scrapy.Spider):
       article_id = str(uuid.uuid4())
 
       article_dict = {
-        'source': 'who'
+        'source': 'who',
         'articleId': article_id,
         'title': article_title,
         'articleURL': article_link,

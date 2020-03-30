@@ -3,20 +3,22 @@ import scrapy
 import datetime as dt
 import uuid
 
+# To run individually
+# scrapy runspider whoCrawler.py -o whoCrawler.json
 
 class CDCCrawler(scrapy.Spider):
   name = 'CDCCrawler'
   start_urls = ['https://www.cdc.gov/coronavirus/2019-ncov/whats-new-all.html']
-  
 
   def __init__(self):
     self.all_data = {}
     self.article_limit = 999
 
   def closed(self, reason):
-    for k,v in self.all_data.iteritems():
-        print("Data [{}: P{}]".format(k,v))
-    
+      print("Finished Scraping for CDC")
+    # for k,v in self.all_data.iteritems():
+    #     print("Data [{}: P{}]".format(k,v))
+
   def parse(self, response):
 
     ul_data = response.css('ul.feed-item-list')[0]
@@ -26,7 +28,6 @@ class CDCCrawler(scrapy.Spider):
         break
       self.article_limit -= 1
 
-      # print("data: ", data)
       article_title = item_data.css('a::text').extract_first().encode('ascii', 'ignore')
       article_uri = item_data.css('a::attr("href")').extract_first()
       article_date = item_data.css('span.feed-item-date::text').extract_first()
@@ -52,7 +53,7 @@ class CDCCrawler(scrapy.Spider):
       self.all_data[article_id] = article_dict
 
       yield scrapy.Request(article_link, callback=self.parse_item_link, cb_kwargs=dict(article_dict=article_dict))
-    
+
 
   def parse_item_link(self, response, article_dict):
 
@@ -75,14 +76,8 @@ class CDCCrawler(scrapy.Spider):
 
     self.all_data[article_id] = article_dict
     yield article_dict
-    
+
 
 
 
 # soup = BeautifulSoup(html_doc, 'html.parser')
-
-
-
-
-
-
