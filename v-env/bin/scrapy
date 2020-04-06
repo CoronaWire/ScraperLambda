@@ -1,4 +1,4 @@
-#!/home/ec2-user/ScraperLambda/v-env/bin/python
+#!/Users/sitefeng/Documents/COVID/ScraperLambda/v-env/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

@@ -46,7 +46,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV='/home/ec2-user/ScraperLambda/v-env'
+VIRTUAL_ENV='/Users/sitefeng/Documents/COVID/ScraperLambda/v-env'
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

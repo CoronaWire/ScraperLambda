@@ -5,22 +5,48 @@ import json
 from cdcCrawler import CDCCrawler
 from whoCrawler import WHOCrawler
 from scrapy.utils.project import get_project_settings
-
+from googleapiclient import discovery
 
 def lambda_handler(event, context):
     print("Starting lambda_handler...")
 
-    crawlers = [CDCCrawler, WHOCrawler]
+    service = discovery.build('sqladmin', 'v1beta4')
 
-    process = CrawlerProcess({
-        'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
-    })
+    # req = service.instances().list(project="coronawire-2020")
+    # resp = req.execute()
+    # print(json.dumps(resp, indent=2))
 
-    for Crawler in crawlers:
-        print("Starting crawing for ", Crawler.name)
-        process.crawl(Crawler)
+# List databases
+    # print(service.databases().list(project=projectId, instance="stagingdb").execute())
 
-    process.start()  # the script will block here until the crawling is finished
+    # testObject = {}
+    tableName = "ModerationTable"
+    projectId = "coronawire-2020"
+    dbInstance = "stagingdb"
+
+    insertBody = {
+        "kind": "sql#database",
+        "name": tableName,
+        "project": projectId,
+        "instance": dbInstance,
+        'articleId': 'try12345', 'title': 'Try Title', 'content': 'Article Content Try', 'specificity': 'national'
+    }
+
+    service.databases().insert(project=projectId, instance=dbInstance, body=insertBody).execute()
+
+
+
+    # crawlers = [CDCCrawler, WHOCrawler]
+    #
+    # process = CrawlerProcess({
+    #     'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
+    # })
+    #
+    # for Crawler in crawlers:
+    #     print("Starting crawing for ", Crawler.name)
+    #     process.crawl(Crawler)
+    #
+    # process.start()  # the script will block here until the crawling is finished
 
     return {
         'statusCode': 200,

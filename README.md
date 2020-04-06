@@ -1,15 +1,65 @@
 # ScraperLambda
 Scraper and AWS Aurora Storage Writer - AWS Lambda Instance
-Language: python2.7
+Language: python3.7
+
+### Environment Setup
+Google Cloud Auth API requires a Service account when gaining access to the cloud instances via local scripts. This environment variable will allow you to run and debug the python scripts locally.
+
+`$ export GOOGLE_APPLICATION_CREDENTIALS="/Users/sitefeng/Documents/COVID/GCP_MasterDataManagerServicePrivateKey.json"`
+
+Ping Si Te for GCP_MasterDataManagerServicePrivateKey.json
+
 
 ### To run all crawlers
-`$ python lambda_function.py`
+`$ python3 lambda_function.py`
 This is the file that AWS Lambda instance will run
 
 ### To run a crawler individually
 `$ scrapy runspider whoCrawler.py -o whoCrawler.json`
 
-### When modifying the AWS Lambda instance
+
+
+### Connecting to Google Cloud PostgreSQL Database
+
+#### CLI Command for connection debugging
+`$ gcloud sql connect <database-name> --user=postgres`
+
+eg:
+- First, find the instance ID
+`$ gcloud sql connect stagingdb --user=postgres`
+
+Pwd is posted on our team Notion page, under Engineering
+
+[More info](https://cloud.google.com/sdk/gcloud/reference/sql/databases/list)
+
+#### Other Commands
+Troubleshooting when installing virtualenv using pip3
+
+```
+pip install -U pip
+sudo pip3 install virtualenv --user
+sudo /usr/bin/easy_install --install-dir /Users/sitefeng/Library/Python/3.7/lib/python/site-packages/ virtualenv
+```
+
+virtualenv should be in /Users/<username>/Library/Python/3.7/lib/python/site-packages (20.0.16)
+
+```
+print(dir(service))
+```
+
+### Commonly used SQL Commands
+Show all tables
+```
+SELECT * FROM pg_catalog.pg_tables
+WHERE
+   schemaname != 'pg_catalog'
+AND schemaname != 'information_schema';
+```
+
+`SELECT * FROM ModerationTable;`
+
+
+### When modifying the AWS Lambda instance (Deprecated)
 Note: AWS Lambda instances do not contain python packages that are installed locally. Therefore, python scripts cannot be zipped and uploaded directly.
 
 Instead, the most robust way is to use `virtualenv`, with the follwing steps. Inspired by [AWS Lambda Doc](https://docs.aws.amazon.com/lambda/latest/dg/python-package.html)
@@ -40,8 +90,8 @@ Now, install all project dependencies in the virtual environment
 `aws$ pip install --user scrapy` ...
 
 try running the lambda function in EC2 to see if it works,
-pip install all the missing packages as errors show up
-`pip install --upgrade pyasn1-modules`
+pip install all the missing packages as errors show up  
+`pip install --upgrade pyasn1-modules`  
 `pip list`
 
 Then, zip the v-env folder and send it back to your local computer
