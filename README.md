@@ -20,32 +20,18 @@ This is the file that AWS Lambda instance will run
 
 
 ### Connecting to Google Cloud PostgreSQL Database
+First, put your local machines public IP address into Google Cloud SQL web console
 
 #### CLI Command for connection debugging
 `$ gcloud sql connect <database-name> --user=postgres`
 
 eg:
-- First, find the instance ID
 `$ gcloud sql connect stagingdb --user=postgres`
 
 Pwd is posted on our team Notion page, under Engineering
 
 [More info](https://cloud.google.com/sdk/gcloud/reference/sql/databases/list)
 
-#### Other Commands
-Troubleshooting when installing virtualenv using pip3
-
-```
-pip install -U pip
-sudo pip3 install virtualenv --user
-sudo /usr/bin/easy_install --install-dir /Users/sitefeng/Library/Python/3.7/lib/python/site-packages/ virtualenv
-```
-
-virtualenv should be in /Users/<username>/Library/Python/3.7/lib/python/site-packages (20.0.16)
-
-```
-print(dir(service))
-```
 
 ### Commonly used SQL Commands
 Show all tables
@@ -56,8 +42,14 @@ WHERE
 AND schemaname != 'information_schema';
 ```
 
+Show all records in ModerationTable
 `SELECT * FROM ModerationTable;`
 
+Delete Records
+`DELETE FROM ModerationTable WHERE ARTICLE_ID='article1';`
+
+Force Delete Table
+`DROP TABLE ModerationTable`
 
 ### When modifying the AWS Lambda instance (Deprecated)
 Note: AWS Lambda instances do not contain python packages that are installed locally. Therefore, python scripts cannot be zipped and uploaded directly.
@@ -114,3 +106,23 @@ https://davidhamann.de/2017/01/27/import-issues-running-python-aws-lambda/
 - Use `sh generateAWSZip.sh` to create a new zip file containing all py scripts in the parent directory.
 
 - Upload the Zip file to the AWS Lambda web console
+
+
+#### Other Commands
+Troubleshooting when installing virtualenv using pip3
+
+```
+pip install -U pip
+sudo pip3 install virtualenv --user
+sudo /usr/bin/easy_install --install-dir /Users/sitefeng/Library/Python/3.7/lib/python/site-packages/ virtualenv
+```
+
+virtualenv should be in /Users/<username>/Library/Python/3.7/lib/python/site-packages (20.0.16)
+
+In python, print out all class properties and methods
+
+```
+print(dir(service))
+```
+
+Switching between OpenSSL 1.0.2 and 1.1.0 `brew switch openssl 1.0.2s`. It's causing a lot of issues with pip recently

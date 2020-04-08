@@ -1,39 +1,25 @@
 
 import scrapy
 from scrapy.crawler import CrawlerProcess
+from postgresConnection import PostgresConnection
 import json
 from cdcCrawler import CDCCrawler
 from whoCrawler import WHOCrawler
 from scrapy.utils.project import get_project_settings
 from googleapiclient import discovery
+import datetime as dt
 
 def lambda_handler(event, context):
     print("Starting lambda_handler...")
 
-    service = discovery.build('sqladmin', 'v1beta4')
+    conn = PostgresConnection()
 
-    # req = service.instances().list(project="coronawire-2020")
-    # resp = req.execute()
-    # print(json.dumps(resp, indent=2))
+    publishDateTime = dt.datetime(2019, 5, 20, 13, 56, 2)
+    conn.insertNewArticle('article_id123', 'Try title', 'Try author', 'Trysource_id123', 'www.article_url.com', 'Try content', 'pending', publishDateTime, 'crawler')
 
-# List databases
-    # print(service.databases().list(project=projectId, instance="stagingdb").execute())
-
-    # testObject = {}
-    tableName = "ModerationTable"
-    projectId = "coronawire-2020"
-    dbInstance = "stagingdb"
-
-    insertBody = {
-        "kind": "sql#database",
-        "name": tableName,
-        "project": projectId,
-        "instance": dbInstance,
-        'articleId': 'try12345', 'title': 'Try Title', 'content': 'Article Content Try', 'specificity': 'national'
-    }
-
-    service.databases().insert(project=projectId, instance=dbInstance, body=insertBody).execute()
-
+    # conn.forceDeleteAllArticles()
+    conn.commit()
+    conn.printAllArticles()
 
 
     # crawlers = [CDCCrawler, WHOCrawler]
@@ -58,3 +44,27 @@ if __name__ == "__main__":
     result = lambda_handler(None, None)
     print("Result returned")
     print(result)
+
+
+    # service = discovery.build('sqladmin', 'v1beta4')
+
+    # req = service.instances().list(project="coronawire-2020")
+    # resp = req.execute()
+    # print(json.dumps(resp, indent=2))
+
+    # List databases
+    # print(service.databases().list(project=projectId, instance="stagingdb").execute())
+
+    # testObject = {'article_id': 'try12345', 'SOURCE_ID': 'source1', 'title': 'Try Title', 'content': 'Article Content Try', 'specificity': 'national', 'PUBLISHED_AT': '2020-04-05 05:53:00'}
+    # tableName = "ModerationTable"
+    # projectId = "coronawire-2020"
+    # dbInstance = "stagingdb"
+    #
+    # insertBody = {
+    #     "kind": "sql#database",
+    #     "name": tableName,
+    #     "project": projectId,
+    #     "instance": dbInstance,
+    # }
+    #
+    # service.databases().insert(project=projectId, instance=dbInstance, body=insertBody).execute()

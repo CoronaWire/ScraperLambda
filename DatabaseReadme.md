@@ -50,7 +50,7 @@ FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 ```
 
-```
+```sql
 CREATE TABLE SourceTable (
   ID           SERIAL NOT NULL,
   SOURCE_ID    VARCHAR(255) PRIMARY KEY NOT NULL UNIQUE,
