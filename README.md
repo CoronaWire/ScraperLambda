@@ -51,6 +51,9 @@ Delete Records
 Force Delete Table
 `DROP TABLE ModerationTable`
 
+Show how many records are there
+`SELECT COUNT(ARTICLE_ID) FROM ModerationTable;`
+
 ### When modifying the AWS Lambda instance (Deprecated)
 Note: AWS Lambda instances do not contain python packages that are installed locally. Therefore, python scripts cannot be zipped and uploaded directly.
 

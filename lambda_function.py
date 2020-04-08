@@ -13,14 +13,14 @@ def lambda_handler(event, context):
     print("Starting lambda_handler...")
 
     conn = PostgresConnection()
-
-    publishDateTime = dt.datetime(2019, 5, 20, 13, 56, 2)
-    conn.insertNewArticle('article_id123', 'Try title', 'Try author', 'Trysource_id123', 'www.article_url.com', 'Try content', 'pending', publishDateTime, 'crawler')
-
     # conn.forceDeleteAllArticles()
+    articleDate = conn.rowCount()
+    print(articleDate)
     conn.commit()
-    conn.printAllArticles()
 
+    # publishDateTime = dt.datetime(2020, 4, 7, 0, 0, 0)
+    # conn.insertNewArticle('article_id7', 'Try title', 'Try author', 'Trysource_id123', 'www.article_url.com', 'Try content', 'pending', publishDateTime, 'crawler')
+    # conn.commit()
 
     # crawlers = [CDCCrawler, WHOCrawler]
     #

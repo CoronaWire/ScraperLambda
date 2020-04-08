@@ -2,7 +2,7 @@
 import scrapy
 import datetime as dt
 import uuid
-
+from postgresConnection import PostgresConnection
 
 class WHOCrawler(scrapy.Spider):
   name = 'WHOCrawler'
@@ -10,11 +10,15 @@ class WHOCrawler(scrapy.Spider):
 
 
   def __init__(self):
+    self.localMode = False
     self.all_data = {}
     self.article_limit = 999
+    self.dbConn = PostgresConnection()
+    self.lastStoredArticleDate = self.dbConn.fetchLatestStoredArticlePublishDateForSource('who')
 
   def closed(self, reason):
       print("Finished Scraping for WHO")
+      self.dbConn.commit()
     # for k,v in self.all_data.iteritems():
     #     print("Data [{}: P{}]".format(k,v))
 
@@ -29,7 +33,7 @@ class WHOCrawler(scrapy.Spider):
         titleIndex += 1
         article_title = item_data.css('h2:nth-child({}) *::text'.format(titleIndex)).get()
         if article_title:
-          article_title = article_title.strip().encode('ascii', 'ignore')
+          article_title = article_title.strip()
 
       if not article_title:
         continue
@@ -45,11 +49,11 @@ class WHOCrawler(scrapy.Spider):
         article_date = item_data.css(':nth-child({}) *::text'.format(dateIndex)).get()
 
       if article_date is not None:
-        article_date = article_date.strip().encode('ascii', 'ignore')
+        article_date = article_date.strip()
 
       published_at = None
       try:
-        published_at = dt.datetime.strptime(article_date, '%d %B %Y').replace(microsecond=0).isoformat()
+        published_at = dt.datetime.strptime(article_date, '%d %B %Y').replace(microsecond=0)
       except:
         print("Article date cannot be found")
 
@@ -65,10 +69,28 @@ class WHOCrawler(scrapy.Spider):
         'source': 'who',
         'articleId': article_id,
         'title': article_title,
-        'articleURL': article_link,
+        'article_url': article_link,
         'scrapedAt': now_string,
-        'publishedAt': published_at,
+        'published_at': published_at,
         'content': content
       }
 
-      yield article_dict
+
+      if self.localMode:
+          yield article_dict
+      else:
+          if not published_at:
+              return
+              yield {}
+
+          # Insert into Google Cloud SQL
+          # First, we need to avoid duplicating articles
+          if self.lastStoredArticleDate and self.lastStoredArticleDate >= published_at:
+              print("Stopping scraper early, lastStoredArticleDate is", self.lastStoredArticleDate)
+              return
+              yield {}
+
+          # Storing into database
+          print(f'Storing into database: [{article_title}]')
+          self.dbConn.insertNewArticle(article_id, article_title, 'WHO', article_dict['source'], article_link, content, 'pending', published_at, 'crawler')
+          yield article_dict
