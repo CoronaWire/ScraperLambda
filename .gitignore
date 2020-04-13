@@ -4,3 +4,4 @@ package-lock.json
 *.zip
 *.pyc
 v-env/
+__pycache__/
