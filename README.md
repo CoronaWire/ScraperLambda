@@ -3,7 +3,7 @@ Scraper and AWS Aurora Storage Writer - AWS Lambda Instance
 Language: python3.7
 
 ### Environment Setup
-Google Cloud Auth API requires a Service account when gaining access to the cloud instances via local scripts. This environment variable will allow you to run and debug the python scripts locally.
+Google Cloud Auth API requires a Service account when gaining access to the cloud instances via local scripts. This environment variable will allow you to run and debug the python scripts locally with google cloud sdk. You might not need this.
 
 `$ export GOOGLE_APPLICATION_CREDENTIALS="/Users/sitefeng/Documents/COVID/GCP_MasterDataManagerServicePrivateKey.json"`
 
@@ -11,10 +11,14 @@ Ping Si Te for GCP_MasterDataManagerServicePrivateKey.json
 
 
 ### To run all crawlers
-`$ python3 lambda_function.py`
+`pipenv install --skip-lock`
+`pipenv run python lambda_function.py`
+`python3 lambda_function.py`
+
 This is the file that AWS Lambda instance will run
 
 ### To run a crawler individually
+`$ pipenv shell`
 `$ scrapy runspider whoCrawler.py -o whoCrawler.json`
 
 

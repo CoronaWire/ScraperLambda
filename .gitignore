@@ -5,3 +5,4 @@ package-lock.json
 *.pyc
 v-env/
 __pycache__/
+/Pipfile.lock
