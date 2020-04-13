@@ -35,10 +35,10 @@ class PostgresConnection:
         except (Exception, psycopg2.Error) as error :
             print("Postgres Error!", error)
 
-    def insertNewArticle(self, article_id, title, author, source_id, article_url, content, mod_status, published_at, created_by):
+    def insertNewArticle(self, article_id, title, author, source_id, article_url, content, mod_status, published_at, created_by, specificity, country):
         try:
-           query = f"INSERT INTO {self.tableName} (ARTICLE_ID, TITLE, AUTHOR, SOURCE_ID, ARTICLE_URL, CONTENT, MOD_STATUS, PUBLISHED_AT, CREATED_BY, UPDATED_BY) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-           record_to_insert = (article_id, title, author, source_id, article_url, content, mod_status, published_at, created_by, created_by)
+           query = f"INSERT INTO {self.tableName} (ARTICLE_ID, TITLE, AUTHOR, SOURCE_ID, ARTICLE_URL, CONTENT, MOD_STATUS, PUBLISHED_AT, CREATED_BY, UPDATED_BY, SPECIFICITY, COUNTRY) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+           record_to_insert = (article_id, title, author, source_id, article_url, content, mod_status, published_at, created_by, created_by, specificity, country)
            self.cursor.execute(query, record_to_insert)
 
         except (Exception, psycopg2.Error) as error :

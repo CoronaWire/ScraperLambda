@@ -1,4 +1,3 @@
-
 import scrapy
 from scrapy.crawler import CrawlerProcess
 from postgresConnection import PostgresConnection
@@ -12,27 +11,27 @@ import datetime as dt
 def lambda_handler(event, context):
     print("Starting lambda_handler...")
 
-    conn = PostgresConnection()
+    # conn = PostgresConnection()
     # conn.forceDeleteAllArticles()
-    articleDate = conn.rowCount()
-    print(articleDate)
-    conn.commit()
+    # articleDate = conn.printAllArticles()
+    # print(articleDate)
+    # conn.commit()
 
     # publishDateTime = dt.datetime(2020, 4, 7, 0, 0, 0)
     # conn.insertNewArticle('article_id7', 'Try title', 'Try author', 'Trysource_id123', 'www.article_url.com', 'Try content', 'pending', publishDateTime, 'crawler')
     # conn.commit()
 
-    # crawlers = [CDCCrawler, WHOCrawler]
-    #
-    # process = CrawlerProcess({
-    #     'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
-    # })
-    #
-    # for Crawler in crawlers:
-    #     print("Starting crawing for ", Crawler.name)
-    #     process.crawl(Crawler)
-    #
-    # process.start()  # the script will block here until the crawling is finished
+    crawlers = [CDCCrawler, WHOCrawler]
+
+    process = CrawlerProcess({
+        'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
+    })
+
+    for Crawler in crawlers:
+        print("Starting crawing for ", Crawler.name)
+        process.crawl(Crawler)
+
+    process.start()  # the script will block here until the crawling is finished
 
     return {
         'statusCode': 200,

@@ -92,5 +92,5 @@ class WHOCrawler(scrapy.Spider):
 
           # Storing into database
           print(f'Storing into database: [{article_title}]')
-          self.dbConn.insertNewArticle(article_id, article_title, 'WHO', article_dict['source'], article_link, content, 'pending', published_at, 'crawler')
+          self.dbConn.insertNewArticle(article_id, article_title, 'WHO', article_dict['source'], article_link, content, 'pending', published_at, 'crawler', 'global', '')
           yield article_dict
