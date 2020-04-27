@@ -1,4 +1,7 @@
 import psycopg2
+import sqlalchemy
+import dataset
+import os
 
 
 class PostgresConnection:
@@ -7,14 +10,28 @@ class PostgresConnection:
     def __init__(self, tableName='ModerationTable'):
         connection = None
         cursor = None
+        cloud_sql_connection_name = 'coronawire-2020:us-west1:stagingdb'
+        password = ""
         try:
-           connection = psycopg2.connect(user="postgres",
-                                          password="",
-                                          port="5432",
-                                          host="",
-                                          database="postgres")
-           cursor = connection.cursor()
-        except (Exception, psycopg2.Error) as error :
+            password = os.environ["POSTGRES_PASSWORD"]
+        except KeyError:
+            print("Environment variable POSTGRES_PASSWORD is not set")
+        try:
+            db = sqlalchemy.create_engine(
+                sqlalchemy.engine.url.URL(
+                    drivername='postgres+pg8000',
+                    username="postgres",
+                    password=password,
+                    database="postgres",
+                    query={
+                        'unix_sock': '/cloudsql/{}/.s.PGSQL.5432'.format(
+                            cloud_sql_connection_name)
+                    }
+                ),
+            )
+            connection = db.connection()
+            cursor = connection.cursor()
+        except Exception as error:
             print("Postgres Error!", error)
 
         self.connection = connection
