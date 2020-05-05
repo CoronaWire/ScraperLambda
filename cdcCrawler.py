@@ -108,7 +108,7 @@ class CDCCrawler(scrapy.Spider):
 
         # Storing into database
         print(f'Storing into database: [{article_title}]')
-        self.dbConn.insertNewArticle(article_id, article_title, 'CDC', article_dict['source'], article_dict['article_url'], content_string, 'pending', published_at, 'crawler', 'country', 'usa')
+        self.dbConn.insertNewArticle(article_id, article_title, 'CDC', article_dict['source'], article_dict['article_url'], content_string, 'pending', published_at, 'crawler', 'country', 'us')
         yield article_dict
 
 
