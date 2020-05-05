@@ -37,26 +37,6 @@ Pwd is posted on our team Notion page, under Engineering
 [More info](https://cloud.google.com/sdk/gcloud/reference/sql/databases/list)
 
 
-### Commonly used SQL Commands
-Show all tables
-```
-SELECT * FROM pg_catalog.pg_tables
-WHERE
-   schemaname != 'pg_catalog'
-AND schemaname != 'information_schema';
-```
-
-Show all records in ModerationTable
-`SELECT * FROM ModerationTable;`
-
-Delete Records
-`DELETE FROM ModerationTable WHERE ARTICLE_ID='article1';`
-
-Force Delete Table
-`DROP TABLE ModerationTable`
-
-Show how many records are there
-`SELECT COUNT(ARTICLE_ID) FROM ModerationTable;`
 
 ### When modifying the AWS Lambda instance (Deprecated)
 Note: AWS Lambda instances do not contain python packages that are installed locally. Therefore, python scripts cannot be zipped and uploaded directly.

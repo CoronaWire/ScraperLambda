@@ -4,14 +4,14 @@ import psycopg2
 class PostgresConnection:
 
     # Default table name is ModerationTable
-    def __init__(self, tableName='ModerationTable'):
+    def __init__(self, tableName='moderationtable_v2'):
         connection = None
         cursor = None
         try:
            connection = psycopg2.connect(user="postgres",
-                                          password="",
+                                          password="admin",
                                           port="5432",
-                                          host="",
+                                          host="34.83.188.109",
                                           database="postgres")
            cursor = connection.cursor()
         except (Exception, psycopg2.Error) as error :
