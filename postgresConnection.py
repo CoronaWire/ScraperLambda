@@ -37,8 +37,8 @@ class PostgresConnection:
 
     def insertNewArticle(self, article_id, title, author, source_id, article_url, content, mod_status, published_at, created_by, specificity, country):
         try:
-           query = f"INSERT INTO {self.tableName} (ARTICLE_ID, TITLE, AUTHOR, SOURCE_ID, ARTICLE_URL, CONTENT, MOD_STATUS, PUBLISHED_AT, CREATED_BY, UPDATED_BY, SPECIFICITY, COUNTRY) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-           record_to_insert = (article_id, title, author, source_id, article_url, content, mod_status, published_at, created_by, created_by, specificity, country)
+           query = f"INSERT INTO {self.tableName} (ARTICLE_ID, TITLE, AUTHOR, SOURCE_ID, ARTICLE_URL, CONTENT, MOD_STATUS, PUBLISHED_AT, CREATED_BY, UPDATED_BY, SPECIFICITY, COUNTRY, SOURCECOUNTRY, fips_processed) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+           record_to_insert = (article_id, title, author, source_id, article_url, content, mod_status, published_at, created_by, created_by, specificity, country, country, True)
            self.cursor.execute(query, record_to_insert)
 
         except (Exception, psycopg2.Error) as error :
