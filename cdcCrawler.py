@@ -98,8 +98,8 @@ class CDCCrawler(scrapy.Spider):
         # Insert into Google Cloud SQL
         # First, we need to avoid duplicating articles
 
-        print('lastStoredArticleDate', self.lastStoredArticleDate)
-        print('published_at', published_at)
+        # print('lastStoredArticleDate', self.lastStoredArticleDate)
+        # print('published_at', published_at)
         if self.lastStoredArticleDate and self.lastStoredArticleDate >= published_at:
             print("Stopping scraper early, lastStoredArticleDate is", self.lastStoredArticleDate)
             return
