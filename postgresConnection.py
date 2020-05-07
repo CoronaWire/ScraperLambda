@@ -1,5 +1,5 @@
 import psycopg2
-
+import os
 
 class PostgresConnection:
 
@@ -8,11 +8,22 @@ class PostgresConnection:
         connection = None
         cursor = None
         try:
+
+           # Staging DB
+           # connection = psycopg2.connect(user="postgres",
+           #                                password="admin",
+           #                                port="5432",
+           #                                host="34.83.188.109",
+           #                                database="postgres")
+
+           # Production DB
            connection = psycopg2.connect(user="postgres",
-                                          password="admin",
+                                          password=os.environ.get('MODERATION_PASSWORD'),
                                           port="5432",
-                                          host="34.83.188.109",
+                                          host="35.188.134.37",
                                           database="postgres")
+
+
            cursor = connection.cursor()
         except (Exception, psycopg2.Error) as error :
             print("Postgres Error!", error)
