@@ -66,7 +66,6 @@ class WHOCrawler(scrapy.Spider):
       article_id = str(uuid.uuid4())
 
       article_dict = {
-        'source': 'who',
         'articleId': article_id,
         'title': article_title,
         'article_url': article_link,
@@ -92,5 +91,5 @@ class WHOCrawler(scrapy.Spider):
 
           # Storing into database
           print(f'Storing into database: [{article_title}]')
-          self.dbConn.insertNewArticle(article_id, article_title, 'WHO', article_dict['source'], article_link, content, 'pending', published_at, 'crawler', 'global', '')
+          self.dbConn.insertNewArticle(article_id, article_title, 'WHO', 'who.int/', article_link, content, 'pending', published_at, 'crawler', 'global', '')
           yield article_dict
